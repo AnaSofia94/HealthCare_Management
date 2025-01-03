@@ -1,0 +1,14 @@
+{% extends "rest_framework/base.html" %}
+
+{% block content %}
+<h2>{{ view.get_view_name|default:"API Endpoint" }}</h2>
+<p>{{ view.get_view_description|default:"No description available." }}</p>
+
+{% if response %}
+    <pre style="background-color: #eee; padding: 10px; border: 1px solid #ccc; overflow-x: auto;">
+        {{ response.data|safe }}
+    </pre>
+{% else %}
+    <p>No response data available.</p>
+{% endif %}
+{% endblock %}

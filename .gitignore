@@ -1,0 +1,14 @@
+# Byte-compiled / generated files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment directories
+.env/
+venv/
+
+# Environment files
+*.env
+
+# Pipenv-related files (lock file can be included if needed)
+Pipfile.lock
