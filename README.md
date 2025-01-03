@@ -4,7 +4,6 @@
 
 This is a RESTful API for managing patient information in a healthcare setting, built using Django and Django REST Framework (DRF). The API is designed to comply with the FHIR (Fast Healthcare Interoperability Resources) standard.
 
-
 ---
 
 ## Features
