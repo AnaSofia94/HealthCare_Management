@@ -13,7 +13,6 @@ COPY . /app
 
 # Install dependencies
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
 
 # Collect static files
 RUN python manage.py collectstatic --noinput

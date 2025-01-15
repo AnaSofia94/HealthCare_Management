@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+django-debug-toolbar = "*"
+
+[packages]
+django = ">=4.0,<5.0"
+djangorestframework = ">=3.14,<4.0"
+drf-yasg = ">=1.21,<2.0"
+gunicorn = ">=20.0,<21.0"
+whitenoise = ">=6.0,<7.0"
+psycopg2-binary = ">=2.9,<3.0"
+python-dotenv = ">=0.21,<1.0"
+fhir.resources = "*"
+
+[requires]
+python_version = "3.11"
