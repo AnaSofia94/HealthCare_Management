@@ -1,168 +1,150 @@
-# HealthCare_Management
+# Healthcare Management API
 
-# Healthcare API
-
-This is a RESTful API for managing patient information in a healthcare setting, built using Django and Django REST Framework (DRF). The API is designed to comply with the FHIR (Fast Healthcare Interoperability Resources) standard.
-
----
+This project provides a RESTful API for managing healthcare patient information while adhering to FHIR standards.
 
 ## Features
+- Add, retrieve, update, and delete patient records.
+- FHIR-compliant data model.
+- Basic token-based authentication.
+- API documentation using Swagger.
 
-- **CRUD Operations**:
-  - Create, Read, Update, and Delete patient information.
-- **FHIR Compliance**:
-  - Structured according to FHIR standards for patient resources.
-- **Authentication**:
-  - Token-based authentication for secure access.
-- **Swagger API Documentation**:
-  - Interactive API documentation using Swagger.
-- **PostgreSQL Support**:
-  - Persistent database storage.
-
----
-
-## Technologies Used
-
-- **Backend**: Django, Django REST Framework
-- **Database**: PostgreSQL
-- **Deployment**: Gunicorn, WhiteNoise, Docker
-- **API Documentation**: DRF-YASG (Swagger)
-- **Python Version**: 3.11
-
----
-
-## Installation and Setup
-
-### Prerequisites
-
+## Requirements
 - Python 3.11+
+- Django 4.0+
 - PostgreSQL
-- Pipenv (for managing virtual environments)
 
-### Step 1: Clone the Repository
+## Installation
 
-```bash
-git clone https://github.com/your-username/healthcare-api.git
-cd healthcare-api
-```
-
-### Step 2: Set Up the Virtual Environment
-
-1. Install `pipenv`:
+1. Clone the repository:
    ```bash
-   pip install pipenv
+   git clone https://github.com/yourusername/HealthCare_Management.git
+   cd HealthCare_Management
    ```
 
 2. Install dependencies:
    ```bash
    pipenv install
-   ```
-   
-    ## Installing Dependencies
-    
-    To install the required Python packages, including the `fhir.resources` package, run:
-    
-    ```bash
-    pip install fhir.resources
-    ```
-
-
-3. Activate the virtual environment:
-   ```bash
    pipenv shell
    ```
 
-### Step 3: Configure the Database
-
-1. Create a PostgreSQL database:
-   ```sql
-   CREATE DATABASE healthcare_api;
+3. Set up the database:
+   ```bash
+   python manage.py migrate
    ```
 
-2. Update the `DATABASES` configuration in `settings.py`:
-   ```python
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'healthcare_api',
-           'USER': 'your_user',
-           'PASSWORD': 'your_password',
-           'HOST': '127.0.0.1',
-           'PORT': '5432',
-       }
-   }
+4. Create a superuser:
+   ```bash
+   python manage.py createsuperuser
    ```
 
-### Step 4: Apply Migrations
+5. Collect static files:
+   ```bash
+   python manage.py collectstatic
+   ```
 
-```bash
-python manage.py migrate
-```
+## Running the Application
 
-### Step 5: Run the Development Server
-
+Start the development server:
 ```bash
 python manage.py runserver
 ```
 
----
+## Authentication (Token)
 
-## API Endpoints
+The API uses token-based authentication. To generate a token for a user:
 
-### Patient Resource
+### Using Django Shell
+```bash
+python manage.py shell
+```
+Then:
+```python
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
-| Method | Endpoint                     | Description                     |
-|--------|-------------------------------|---------------------------------|
-| POST   | `/fhir/Patient/`             | Add a new patient record.      |
-| GET    | `/fhir/Patient/`             | Retrieve a list of all patients. |
-| GET    | `/fhir/Patient/{id}/`        | Retrieve a specific patient.   |
-| PUT    | `/fhir/Patient/{id}/`        | Update a specific patient.     |
-| DELETE | `/fhir/Patient/{id}/`        | Delete a specific patient.     |
+user = User.objects.get(username='your-username')
+token, created = Token.objects.get_or_create(user=user)
+print(f'Token for user {user.username}: {token.key}')
+```
 
----
+### Using Management Command
+You can also generate a token using a custom management command:
+```bash
+python manage.py generate_token your-username
+```
 
-## Authentication
+#### Response:
+```json
+{
+    "token": "your-generated-token"
+}
+```
 
-This API uses token-based authentication. Obtain a token by sending your credentials to the `/api/token/` endpoint.
+## Endpoints
 
-- **Header Example**:
-  ```http
-  Authorization: Token <your-token>
-  ```
----
-
-## Deployment
-
-### Docker Deployment
-
-1. Build the Docker image:
-   ```bash
-   docker build -t healthcare-api .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 8000:8000 healthcare-api
-   ```
-
----
+### Patients
+- **POST /fhir/Patient/**: Add a new patient record.
+- **GET /fhir/Patient/**: Retrieve a list of all patients.
+- **GET /fhir/Patient/{id}/**: Retrieve details of a specific patient by ID.
+- **PUT /fhir/Patient/{id}/**: Update the details of a specific patient.
+- **DELETE /fhir/Patient/{id}/**: Delete a specific patient record.
 
 ## API Documentation
 
-Access the Swagger UI for interactive API documentation at:
+Swagger is used for API documentation.
+
+### Access Swagger UI
+Run the server and navigate to:
 ```
 http://127.0.0.1:8000/swagger/
 ```
 
----
+### Swagger JSON
+To fetch the JSON documentation:
+```bash
+curl http://127.0.0.1:8000/swagger.json
+```
+
+## Deployment
+
+### Docker
+
+1. Build the Docker image:
+   ```bash
+   docker build -t healthcare_api .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -p 8000:8000 healthcare_api
+   ```
+
+### Environment Variables
+Ensure the following environment variables are set:
+- `DJANGO_SECRET_KEY`
+- `DATABASE_URL`
+
+You can use a `.env` file to manage these variables.
+
+### Notes
+If the `fhir.resources` package is not installed via `pipenv`, you can install it manually:
+```bash
+pip install fhir.resources
+```
+Alternatively, add it directly to your `Pipfile` using:
+```bash
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fhir.resources = "*"
+```
 
 ## Testing
 
-Run tests to ensure the API is working as expected:
+Run tests using:
 ```bash
 python manage.py test
 ```
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
