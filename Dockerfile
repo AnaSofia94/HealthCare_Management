@@ -14,9 +14,6 @@ COPY . /app
 # Install dependencies
 RUN pip install --upgrade pip
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
 # Expose port 8000
 EXPOSE 8000
 
