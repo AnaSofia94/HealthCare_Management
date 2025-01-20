@@ -57,6 +57,15 @@ cd healthcare-api
    ```bash
    pipenv install
    ```
+   
+    ## Installing Dependencies
+    
+    To install the required Python packages, including the `fhir.resources` package, run:
+    
+    ```bash
+    pip install fhir.resources
+    ```
+
 
 3. Activate the virtual environment:
    ```bash
